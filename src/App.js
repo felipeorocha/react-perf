@@ -1,23 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import { useCallback, useEffect, useState } from "react";
+import { Button } from "./Button";
 
 function App() {
+
+  const [input, setInput] = useState('');
+  const [label, setLabel] = useState('');
+
+  const handleInputChange = (event) => {
+    console.log('2 - change triggered');
+    setInput(event.target.value);
+  };
+
+  const updateLabel = useCallback((event) => {
+    event.preventDefault();
+    console.log('3 - update label triggered');
+    setLabel(input);
+    setInput('');
+  }, []);
+
+  useEffect(() => {
+    console.log('1 - re-rendered');
+  });
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <form onSubmit={updateLabel}>
+        <label>Some label:</label>
+        <input value={input} onChange={(e) => handleInputChange(e)} />
+        <Button onClick={updateLabel} />
+      </form>
+      <h3>{label}</h3>
     </div>
   );
 }
